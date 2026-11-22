@@ -1,0 +1,263 @@
+{
+  "sources": [
+    {
+      "id": "S01",
+      "title": "Retrieval-augmented generation explained",
+      "publisher": "IBM Research",
+      "url": "https://research.ibm.com/blog/retrieval-augmented-generation-RAG",
+      "focus": "Why grounding and citations matter",
+      "summary": "RAG supplements a language model with an external knowledge base. Its open-book approach can improve the checkability of responses and reduce unsupported claims, but source verification is still required.",
+      "concepts": [
+        "RAG definition",
+        "Grounding",
+        "Limitations"
+      ]
+    },
+    {
+      "id": "S02",
+      "title": "What is Retrieval-Augmented Generation (RAG)?",
+      "publisher": "Google Cloud",
+      "url": "https://cloud.google.com/use-cases/retrieval-augmented-generation",
+      "focus": "Retrieval and grounded generation",
+      "summary": "RAG combines search or database retrieval with generative language models. Retrieved information is incorporated into the model context to support relevant grounded output.",
+      "concepts": [
+        "RAG definition",
+        "Retrieve",
+        "Augment",
+        "Generate"
+      ]
+    },
+    {
+      "id": "S03",
+      "title": "RAG and indexes in Microsoft Foundry",
+      "publisher": "Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/retrieval-augmented-generation",
+      "focus": "Three stages, indexes and embeddings",
+      "summary": "The RAG flow is Retrieve → Augment → Generate. An index organizes information for search; keyword, vector, semantic, and hybrid methods are possible. Embeddings represent content numerically.",
+      "concepts": [
+        "Three-step pipeline",
+        "Indexes",
+        "Embeddings",
+        "Sources"
+      ]
+    },
+    {
+      "id": "S04",
+      "title": "Retrieval API guide",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/api/docs/guides/retrieval",
+      "focus": "Semantic search and vector stores",
+      "summary": "Semantic search finds related content even with limited keyword overlap. Vector stores function as searchable indexes used for retrieval; a separate model step may synthesize a response.",
+      "concepts": [
+        "Semantic search",
+        "Embeddings",
+        "Vector stores"
+      ]
+    },
+    {
+      "id": "S05",
+      "title": "File search guide",
+      "publisher": "OpenAI Developers",
+      "url": "https://developers.openai.com/api/docs/guides/tools-file-search",
+      "focus": "Using uploaded documents as a knowledge base",
+      "summary": "File search uses uploaded files placed in vector stores to retrieve relevant context. File references can connect generated output back to the underlying knowledge base.",
+      "concepts": [
+        "Ingestion",
+        "Retrieval",
+        "Evidence citations"
+      ]
+    },
+    {
+      "id": "S06",
+      "title": "Design and develop a RAG solution",
+      "publisher": "Microsoft Azure Architecture Center",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide",
+      "focus": "Chunking, metadata and evaluation",
+      "summary": "A document pipeline can split sources into chunks, enrich them with metadata, embed them, and index them. Evaluate retrieval and generated answers independently for groundedness, completeness and relevance.",
+      "concepts": [
+        "Ingestion",
+        "Chunking",
+        "Metadata",
+        "Evaluation",
+        "Workflow loop"
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "intro",
+      "title": "What is RAG?",
+      "zh": "什麼是 RAG？",
+      "tag": "Foundation",
+      "lead": "RAG = Retrieval-Augmented Generation. It lets an AI model consult relevant documents before giving an answer.",
+      "body": [
+        "Think of a closed-book exam versus an open-book exam. A normal language model relies mostly on patterns learned during training; a RAG system first looks up relevant material and provides it as context.",
+        "RAG does not automatically guarantee truth. It gives the system evidence that can be checked."
+      ],
+      "takeaway": "RAG = search first, then answer with evidence.",
+      "sources": [
+        "S01",
+        "S02",
+        "S03"
+      ]
+    },
+    {
+      "id": "problem",
+      "title": "What problem does RAG solve?",
+      "zh": "為何需要 RAG？",
+      "tag": "Foundation",
+      "lead": "A model may lack recent, private or specialized information.",
+      "body": [
+        "Example: A student asks an AI to explain a specific course policy. The model may not have seen the latest course document.",
+        "With RAG, the application can retrieve the course handbook and cite the relevant passage."
+      ],
+      "takeaway": "Use RAG when reliable answers depend on information outside a model’s training.",
+      "sources": [
+        "S01",
+        "S03"
+      ]
+    },
+    {
+      "id": "pipeline",
+      "title": "Retrieve → Augment → Generate",
+      "zh": "檢索、補充、生成",
+      "tag": "Pipeline",
+      "lead": "Three distinct steps make the answer traceable.",
+      "body": [
+        "Retrieve: Search the knowledge base for passages relevant to the question.",
+        "Augment: Add selected passages and their source identifiers to the model prompt.",
+        "Generate: Ask the model to explain using those passages; show a citation or admit insufficient evidence."
+      ],
+      "takeaway": "Always retrieve before drafting; verify citations after drafting.",
+      "sources": [
+        "S02",
+        "S03"
+      ]
+    },
+    {
+      "id": "ingest",
+      "title": "Building a searchable knowledge base",
+      "zh": "建立可搜尋的知識庫",
+      "tag": "Pipeline",
+      "lead": "Before question-answering, prepare documents carefully.",
+      "body": [
+        "Select authoritative source documents and record their original URLs.",
+        "Create concise, faithful source notes; split longer content into topic-centered chunks.",
+        "Attach metadata such as source ID, title, topic and URL. Index the material so it can be searched."
+      ],
+      "takeaway": "Good answers begin with traceable source preparation.",
+      "sources": [
+        "S05",
+        "S06"
+      ]
+    },
+    {
+      "id": "search",
+      "title": "Keyword vs semantic search",
+      "zh": "關鍵字與語意搜尋",
+      "tag": "Tools",
+      "lead": "Matching exact words is not the same as matching meaning.",
+      "body": [
+        "Keyword search is useful for exact phrases and identifiers.",
+        "Semantic search can connect similar ideas expressed with different words. Embeddings encode meaning as numerical vectors.",
+        "Our static teaching Wiki uses a transparent keyword-based index; it is not a vector database and does not call a live LLM."
+      ],
+      "takeaway": "For this demonstration: a local keyword search; for production: consider semantic or hybrid retrieval.",
+      "sources": [
+        "S03",
+        "S04"
+      ]
+    },
+    {
+      "id": "citations",
+      "title": "Evidence and citations",
+      "zh": "證據與來源",
+      "tag": "Quality",
+      "lead": "Every important slide claim should point back to at least one Wiki source.",
+      "body": [
+        "Keep the source ID attached to each note.",
+        "Require at least one relevant citation for each major explanation.",
+        "Check whether the cited source actually supports the claim. Citation presence is not the same as citation correctness."
+      ],
+      "takeaway": "Trace a slide claim → Wiki page → source note → original reference.",
+      "sources": [
+        "S01",
+        "S03",
+        "S05"
+      ]
+    },
+    {
+      "id": "evaluation",
+      "title": "Evaluation and quality checks",
+      "zh": "評估與品質檢查",
+      "tag": "Quality",
+      "lead": "Check inputs, retrieval and output—not just the final slide.",
+      "body": [
+        "Source check: Are the URL, publisher and claim valid?",
+        "Retrieval check: Did search return relevant Wiki material?",
+        "Content check: Are explanations accurate, beginner-friendly and cited?",
+        "Presentation check: Do links, keyboard navigation and small screens work?"
+      ],
+      "takeaway": "Move checks upstream so a faulty source never reaches the slide.",
+      "sources": [
+        "S06",
+        "S03"
+      ]
+    },
+    {
+      "id": "limits",
+      "title": "Benefits and limitations",
+      "zh": "優點與限制",
+      "tag": "Quality",
+      "lead": "RAG improves access to evidence; it is not a guarantee against hallucination.",
+      "body": [
+        "Benefits: less need to retrain for every new document, easier provenance and more specific answers.",
+        "Limitations: bad source material, missing passages or a poor search ranking can still produce bad answers.",
+        "A high-quality workflow includes retry paths and an explicit “insufficient evidence” result."
+      ],
+      "takeaway": "RAG helps, but retrieval and verification remain essential.",
+      "sources": [
+        "S01",
+        "S06"
+      ]
+    },
+    {
+      "id": "example",
+      "title": "Example: course handbook Q&A",
+      "zh": "課程手冊問答範例",
+      "tag": "Application",
+      "lead": "A hypothetical, clearly labeled example of grounded answering.",
+      "body": [
+        "Question: “How many references must my assignment include?”",
+        "Retrieve: Find the relevant paragraph in a hypothetical course handbook.",
+        "Augment: Attach that paragraph, source title and section to the prompt.",
+        "Generate: Answer only if the retrieved handbook explicitly states a number; otherwise explain that the provided evidence is insufficient."
+      ],
+      "takeaway": "Never invent a policy or deadline when the source is missing.",
+      "sources": [
+        "S02",
+        "S03",
+        "S05"
+      ]
+    },
+    {
+      "id": "workflow",
+      "title": "Our Wiki-to-slide workflow",
+      "zh": "本次作業的流程",
+      "tag": "Application",
+      "lead": "Discussion → Ingest 6 sources → Draft Wiki → Retrieve notes → Build slides → Test → Revise.",
+      "body": [
+        "First, define the audience: first-time learners, about 10 minutes.",
+        "Next, ingest six traceable, paraphrased source summaries into the Wiki.",
+        "Then create an outline and map each slide to at least one Wiki topic and source.",
+        "Finally, run source, navigation, text overflow and misconception checks. Retry the failing stage instead of regenerating everything."
+      ],
+      "takeaway": "An early source check and a final link check form the two main quality gates.",
+      "sources": [
+        "S03",
+        "S05",
+        "S06"
+      ]
+    }
+  ]
+}
